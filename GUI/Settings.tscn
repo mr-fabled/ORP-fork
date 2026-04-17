@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://cls01o1dl5i25"]
+
+[ext_resource type="Script" uid="uid://o6yme87rmk62" path="res://GUI/Sensitivity.gd" id="1_lqlgg"]
+
+[node name="HSlider" type="HSlider" unique_id=1186367559]
+modulate = Color(0.6683092, 0.9999998, 0.7302879, 1)
+offset_left = 25.0
+offset_top = 46.0
+offset_right = 370.0
+offset_bottom = 62.0
+max_value = 10.0
+value = 5.0
+scrollable = false
+tick_count = 20
+ticks_on_borders = true
+ticks_position = 3
+script = ExtResource("1_lqlgg")
+
+[node name="Label" type="Label" parent="." unique_id=724983520]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 21.0
+offset_right = 360.0
+offset_bottom = 44.0
+text = "sensitivity wow - "
+
+[node name="Label2" type="Label" parent="." unique_id=911235206]
+layout_mode = 0
+offset_left = -12.0
+offset_top = -6.0
+offset_right = 120.0
+offset_bottom = 43.0
+text = "0
+"
+
+[node name="Label3" type="Label" parent="." unique_id=1515855185]
+layout_mode = 0
+offset_left = 347.0
+offset_top = -3.0
+offset_right = 479.0
+offset_bottom = 46.0
+text = "1"
+
+[connection signal="value_changed" from="." to="." method="_on_value_changed"]

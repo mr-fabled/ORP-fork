@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://d3w0odx2msggi"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fpvxl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nyt2y"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_iuq8f"]
+material = SubResource("StandardMaterial3D_nyt2y")
+
+[node name="Part" type="RigidBody3D" unique_id=1081425028]
+freeze = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1030342702]
+transform = Transform3D(1, 0, 0, 0, 0.39999998, 0, 0, 0, 1, 0.5, 0.5, 0.5)
+shape = SubResource("BoxShape3D_fpvxl")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1760716609]
+transform = Transform3D(1, 0, 0, 0, 0.39999998, 0, 0, 0, 1, 0.5, 0.20000002, 0.5)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_iuq8f")

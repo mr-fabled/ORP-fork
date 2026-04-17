@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://d1c2eswg8w2pk"]
+
+[ext_resource type="PackedScene" uid="uid://b8q02e5g57tx4" path="res://character/player.tscn" id="1_u52ul"]
+[ext_resource type="PackedScene" uid="uid://dsern6kcs1k5t" path="res://Parts/Part.tscn" id="2_vonw3"]
+[ext_resource type="Texture2D" uid="uid://n57bufw4xuqm" path="res://assets/citrus_orchard_road_puresky_4k.exr" id="3_oi3di"]
+[ext_resource type="PackedScene" uid="uid://bg63l1nkvrbap" path="res://Parts/Inlet.tscn" id="4_0b4ue"]
+[ext_resource type="PackedScene" uid="uid://b35nds8m0c77l" path="res://GUI/shiftlockIcon.tscn" id="5_f2txt"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0b4ue"]
+panorama = ExtResource("3_oi3di")
+
+[sub_resource type="Sky" id="Sky_f2txt"]
+sky_material = SubResource("PanoramaSkyMaterial_0b4ue")
+
+[sub_resource type="Environment" id="Environment_1ainy"]
+background_mode = 2
+sky = SubResource("Sky_f2txt")
+
+[node name="Node3D" type="Node3D" unique_id=489380727]
+
+[node name="Player" parent="." unique_id=1574667455 instance=ExtResource("1_u52ul")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0852761, 1, 3.1023517)
+
+[node name="Part" parent="." unique_id=1081425028 instance=ExtResource("2_vonw3")]
+transform = Transform3D(8, 0, 0, 0, 0.5, 0, 0, 0, 8, 1, 0, 1)
+
+[node name="Part2" parent="." unique_id=2120684368 instance=ExtResource("2_vonw3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, 1)
+
+[node name="Part3" parent="." unique_id=483416614 instance=ExtResource("2_vonw3")]
+transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 5, 0.5, 2)
+
+[node name="Part5" parent="." unique_id=1632966421 instance=ExtResource("2_vonw3")]
+transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 5, 1, 5)
+
+[node name="Part4" parent="." unique_id=11903657 instance=ExtResource("2_vonw3")]
+transform = Transform3D(1, 0, 0, 0, 6, 0, 0, 0, 2, 5, 0.5, 3)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1117970329]
+environment = SubResource("Environment_1ainy")
+
+[node name="Inlet" parent="." unique_id=1224397616 instance=ExtResource("4_0b4ue")]
+transform = Transform3D(1, 0, 0, 0, 4, 0, 0, 0, 2, 4, 0.5, 2)
+
+[node name="ShiftlockIcon" parent="." unique_id=598571543 instance=ExtResource("5_f2txt")]
