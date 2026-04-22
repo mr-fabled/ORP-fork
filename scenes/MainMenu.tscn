@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://clflyp4upy643" path="res://scripts/main_menu.gd" id="1_ow34m"]
 [ext_resource type="Texture2D" uid="uid://bff45kdw0wpbe" path="res://assets/images/aa.png" id="1_yqorp"]
 [ext_resource type="FontFile" uid="uid://bb74yqfgngijg" path="res://assets/fonts/AlteHaasGroteskBold.ttf" id="2_0ykhv"]
+[ext_resource type="Texture2D" uid="uid://wec8jyru71tj" path="res://assets/images/Obby Revival Project.svg" id="3_mipys"]
 [ext_resource type="Theme" uid="uid://dyn87lf4436y3" path="res://resources/MainMenuButton.tres" id="4_l72w3"]
 [ext_resource type="PackedScene" uid="uid://bwlmhgmpfqdjh" path="res://GUI/Scenes/sensitivity.tscn" id="5_l72w3"]
 [ext_resource type="PackedScene" uid="uid://bll3e5wwm6qpo" path="res://GUI/Scenes/FOV.tscn" id="6_826wr"]
@@ -15,7 +16,7 @@ script/source = "extends Sprite2D
 var rot_speed = 5
 var target_rot_speed = 5
 var hovering = false
-const initial_scale = Vector2(1.827,1.827)
+const initial_scale = Vector2(.7,.7)
 
 func _process(dt:float):
 	rot_speed = move_toward(rot_speed,target_rot_speed,dt*50)
@@ -48,8 +49,8 @@ position_smoothing_enabled = true
 [node name="Main" type="Node2D" parent="." unique_id=1987126305]
 
 [node name="Aa" type="Sprite2D" parent="Main" unique_id=1352393718]
-position = Vector2(-497, -219)
-scale = Vector2(1.8266667, 1.8266667)
+position = Vector2(-485.75, -219)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_yqorp")
 script = SubResource("GDScript_yqorp")
 
@@ -58,14 +59,10 @@ script = SubResource("GDScript_yqorp")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Main/Aa/Area2D" unique_id=985516899]
 shape = SubResource("CircleShape2D_yqorp")
 
-[node name="Title" type="Label" parent="Main" unique_id=1161295040]
-offset_left = -360.0
-offset_top = -297.0
-offset_right = 36.0
-offset_bottom = -122.0
-theme_override_fonts/font = ExtResource("2_0ykhv")
-theme_override_font_sizes/font_size = 128
-text = "ORP"
+[node name="Aa2" type="Sprite2D" parent="Main" unique_id=1400207787]
+position = Vector2(-303.75, -219)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("3_mipys")
 
 [node name="Play" type="Button" parent="Main" unique_id=1896613640]
 offset_left = -578.0
@@ -143,6 +140,7 @@ alignment = 0
 [node name="FOV" parent="Settings" unique_id=432107997 instance=ExtResource("6_826wr")]
 offset_left = 44.0
 offset_right = 528.8485
+max_value = 80.0
 
 [connection signal="mouse_entered" from="Main/Aa/Area2D" to="Main/Aa" method="_on_hover"]
 [connection signal="mouse_exited" from="Main/Aa/Area2D" to="Main/Aa" method="_leave_hover"]

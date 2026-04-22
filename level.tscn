@@ -280,6 +280,8 @@ transform = Transform3D(8, 0, 0, 0, 0.5, 0, 0, 0, 11, 2.5012093, 1.1393604, -22.
 [node name="Part10" parent="Old" unique_id=1961468824 instance=ExtResource("2_vonw3")]
 transform = Transform3D(-35.000004, 0, 0, 0, 0.5, 0, 0, 0, 35, 40.251205, 1.1393604, -1.9926758)
 
+[node name="Node" type="Node" parent="Old/Part10" unique_id=884406828]
+
 [node name="Part59" parent="Old" unique_id=336320298 instance=ExtResource("2_vonw3")]
 transform = Transform3D(0.5, 0, 0, 0, -35, -3.059797e-06, 0, -3.059797e-06, 35, 40.251205, 36.63936, -1.9926748)
 
