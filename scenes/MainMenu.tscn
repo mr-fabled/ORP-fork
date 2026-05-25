@@ -12,7 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://b5gciitoxxw3j" path="res://assets/prefabs/UI/maxFPS.tscn" id="7_ucygd"]
 [ext_resource type="PackedScene" uid="uid://buyvpgvyi0uoh" path="res://assets/prefabs/UI/alljumpToggle.tscn" id="8_mipys"]
 [ext_resource type="PackedScene" uid="uid://duj8uanvn1sqi" path="res://assets/prefabs/models/character.tscn" id="12_bky6r"]
-[ext_resource type="PackedScene" uid="uid://dy2sb60hk1gd2" path="res://assets/prefabs/UI/RPCToggle.tscn" id="13_l4mxc"]
+[ext_resource type="Script" uid="uid://cpxi2640mxigo" path="res://scripts/classes/character.gd" id="13_l4mxc"]
+[ext_resource type="PackedScene" uid="uid://dy2sb60hk1gd2" path="res://assets/prefabs/UI/RPCToggle.tscn" id="14_5faoh"]
 
 [sub_resource type="GDScript" id="GDScript_2nypq"]
 resource_name = "Location"
@@ -92,12 +93,12 @@ func _process(delta: float) -> void:
 script = ExtResource("1_ow34m")
 menu_avatar = NodePath("AvatarCustom/SubViewportContainer/SubViewport/CharacterAvatar")
 body_parts = {
-NodePath("AvatarCustom/VBoxContainer/HeadRow/ColorPickerButton"): "head",
-NodePath("AvatarCustom/VBoxContainer/TorsoRow/ColorPickerButton"): "torso",
-NodePath("AvatarCustom/VBoxContainer/LeftArmRow/ColorPickerButton"): "left_arm",
-NodePath("AvatarCustom/VBoxContainer/RightArmRow/ColorPickerButton"): "right_arm",
-NodePath("AvatarCustom/VBoxContainer/LeftLegRow/ColorPickerButton"): "left_leg",
-NodePath("AvatarCustom/VBoxContainer/RightLegRow/ColorPickerButton"): "right_leg"
+NodePath("AvatarCustom/VBoxContainer/HeadRow/head"): "head",
+NodePath("AvatarCustom/VBoxContainer/TorsoRow/torso"): "torso",
+NodePath("AvatarCustom/VBoxContainer/LeftArmRow/left_arm"): "left_arm",
+NodePath("AvatarCustom/VBoxContainer/RightArmRow/right_arm"): "right_arm",
+NodePath("AvatarCustom/VBoxContainer/LeftLegRow/left_leg"): "left_leg",
+NodePath("AvatarCustom/VBoxContainer/RightLegRow/right_leg"): "right_leg"
 }
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1544198342]
@@ -318,7 +319,7 @@ mouse_filter = 2
 layout_mode = 2
 text = "Head color:"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/HeadRow" unique_id=2101495266]
+[node name="head" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/HeadRow" unique_id=2101495266]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 1, 1, 1)
@@ -330,7 +331,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Torso color:"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/TorsoRow" unique_id=1800295999]
+[node name="torso" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/TorsoRow" unique_id=1800295999]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 1, 1, 1)
@@ -342,7 +343,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Left Arm color:"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/LeftArmRow" unique_id=1161515155]
+[node name="left_arm" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/LeftArmRow" unique_id=1161515155]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 1, 1, 1)
@@ -354,7 +355,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Right Arm color:"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/RightArmRow" unique_id=660041187]
+[node name="right_arm" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/RightArmRow" unique_id=660041187]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 1, 1, 1)
@@ -366,7 +367,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Left Leg color:"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/LeftLegRow" unique_id=1848019659]
+[node name="left_leg" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/LeftLegRow" unique_id=1848019659]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 1, 1, 1)
@@ -378,7 +379,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Right Leg color:"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/RightLegRow" unique_id=1491178475]
+[node name="right_leg" type="ColorPickerButton" parent="AvatarCustom/VBoxContainer/RightLegRow" unique_id=1491178475]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 1, 1, 1)
@@ -397,6 +398,7 @@ size = Vector2i(348, 244)
 render_target_update_mode = 4
 
 [node name="CharacterAvatar" parent="AvatarCustom/SubViewportContainer/SubViewport" unique_id=65602991 instance=ExtResource("12_bky6r")]
+script = ExtResource("13_l4mxc")
 
 [node name="Camera3D" type="Camera3D" parent="AvatarCustom/SubViewportContainer/SubViewport" unique_id=1926858213]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5819216)
@@ -405,7 +407,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5819216)
 light_energy = 0.5
 sky_mode = 1
 
-[node name="RPCToggle" parent="." unique_id=214793037 instance=ExtResource("13_l4mxc")]
+[node name="RPCToggle" parent="." unique_id=214793037 instance=ExtResource("14_5faoh")]
 offset_left = 704.0
 offset_top = 61.0
 offset_right = 845.0
