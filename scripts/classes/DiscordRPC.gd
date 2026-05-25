@@ -11,7 +11,7 @@ func _ready():
 	start_time = int(Time.get_unix_time_from_system())
 	enabled = GameManager.RPC
 
-	await get_tree().process_frame
+	await get_tree().create_timer(0.2).timeout # bad but works
 
 	if enabled:
 		init()
