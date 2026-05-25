@@ -1,4 +1,4 @@
-<strong> #TODO: </strong> fix the textures of cylinders, at the moment they are completely blank white.
+<strong> #TODO: </strong> N/A
 
 <b>
 For the exporter change:
