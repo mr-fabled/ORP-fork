@@ -19,7 +19,7 @@ func _ready() -> void:
 	update_part_color("right_leg", GameManager.data.body_colors.get("right_leg", Color.WHITE))
 	
 func update_part_color(part_name: String, new_color: Color) -> void:
-	await ready
+	
 	var target_mesh: MeshInstance3D = null
 	
 	match part_name:
