@@ -47,6 +47,8 @@ var just_jumped_off := false
 @onready var cam: CamStuff = $Camera3D
 @onready var ray = $RayCast3D
 @onready var topray = $RayCast3D2
+@onready var glidetop = $GlideTop
+@onready var glidebottom = $GlideBottom
 @onready var brickCollision = $Area3D
 @onready var player = $Character
 @onready var playerAnims = $Character/AnimationPlayer
@@ -199,6 +201,7 @@ func reset():
 	knockback_timer = 0.0
 
 func _physics_process(delta: float) -> void:
+	
 	# timers
 	truss_timer += delta
 	jump_lock = max(jump_lock - delta, 0.0)
@@ -324,17 +327,11 @@ func _physics_process(delta: float) -> void:
 	
 		var at_top := true
 		if climb_normal != Vector3.ZERO:
-			var space_state = get_world_3d().direct_space_state
-			
-			# Starts at chest height (0.5 best value)
-			var ray_start = global_position + Vector3(0, 0.5, 0) 
-			var ray_end = ray_start - climb_normal * 1.2 
-			
-			var query = PhysicsRayQueryParameters3D.create(ray_start, ray_end)
-			
-			var result = space_state.intersect_ray(query)
-			
-			if result and result.collider.is_in_group("climbable"):
+			var hitting_truss: bool = glidetop.is_colliding() and glidetop.get_collider().is_in_group("climbable")
+			if not hitting_truss:
+				if glidebottom.is_colliding() and glidebottom.get_collider().is_in_group("climbable"):
+					hitting_truss = true
+			if hitting_truss:
 				at_top = false
 		# Allows gliding ONLY IF torso is above truss
 		if at_top and input_dir.x != 0:
@@ -361,7 +358,17 @@ func _physics_process(delta: float) -> void:
 			climb_input = sign(climb_input)
 
 		velocity.y = climb_input * climb_speed
-
+		
+		# from 0-1, the closer to 1 the stricter your camera needs to be straight to glide (fixes gliding backward accidentally)
+		var looking_from_behind : float = abs(camf.dot(climb_normal))
+		
+		if at_top and input_dir.x != 0 and looking_from_behind > 0.7:
+			velocity.x = right.x * input_dir.x * SPEED
+			velocity.z = right.z * input_dir.x * SPEED
+		else:
+			# If looking from the side, prevent side velocity from breaking the stick force
+			velocity.x = 0
+			velocity.z = 0
 		set_climb_anim(
 			climb_input == 0,
 			"Up" if climb_input > 0 else "Down" if climb_input < 0 else "Idle"
