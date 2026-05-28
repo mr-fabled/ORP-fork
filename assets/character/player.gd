@@ -318,6 +318,7 @@ func _physics_process(delta: float) -> void:
 		reset()
 		
 	if Input.is_action_just_pressed("ui_accept"):
+		# truss bouncing
 		if is_climbing:
 			var backward_dir = global_transform.basis.z
 			var knockback_dir = Vector3(-backward_dir.x, 0, -backward_dir.z).normalized()
