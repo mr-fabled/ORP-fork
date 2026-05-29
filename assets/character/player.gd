@@ -70,6 +70,8 @@ var just_jumped_off := false
 var climb_grace := 0.0
 var last_truss_point := Vector3.ZERO
 
+var noclip_speed := 60.0
+
 # GUI
 
 @export var timer: Control
@@ -204,7 +206,7 @@ func reset():
 			cam.global_transform = spawn.get_meta("camera_transform")
 			
 			cam.sync_angles(cam.global_transform)
-		if not GameManager.alljump:
+		if not GameManager.practice:
 			timer.get_node("Panel").resetTime()
 		
 
@@ -289,7 +291,7 @@ func _physics_process(delta: float) -> void:
 			player.position.y += diff
 
 	# gravity
-	if not is_on_floor() and not is_climbing:
+	if not is_on_floor() and not is_climbing and not $CollisionShape3D.disabled:
 		velocity += get_gravity() * delta
 
 	# truss coyote logic
@@ -316,7 +318,52 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("ResetAlt") and GameManager.RToggle:
 		reset()
+		
+	if GameManager.practice:
+		if Input.is_action_just_pressed("noclip"):
+			$CollisionShape3D.disabled = not $CollisionShape3D.disabled
+			if $CollisionShape3D.disabled:
+				velocity = Vector3.ZERO 
 
+		if Input.is_action_just_pressed("freecam"):
+			cam.freecam_active = not cam.freecam_active
+				
+		if cam.freecam_active:
+			State = states.Idle
+			update_anim()
+			return
+	
+	# noclip functionality
+	# i made it rly close to roblox
+	if GameManager.practice and $CollisionShape3D.disabled:
+		State = states.Idle
+		update_anim()
+		
+		rotation.y = cam.yaw + PI
+		rotation.x = -cam.pitch 
+		
+		# i hate these action names so much someone make better names
+		if Input.is_action_just_pressed("noclipspeedup"):
+			noclip_speed = min(noclip_speed * 2.0, 500.0)
+		if Input.is_action_just_pressed("noclipspeeddown"):
+			noclip_speed = max(noclip_speed / 2.0, 3.75)
+		
+		var fly_dir := Vector3.ZERO
+		var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+		var cam_basis = cam.global_transform.basis
+		
+		fly_dir = (cam_basis.x.normalized() * input_dir.x) + (-cam_basis.z.normalized() * input_dir.y)
+		
+		if Input.is_action_pressed("ui_accept"):
+			fly_dir.y += 1.0
+			
+		global_position += fly_dir.normalized() * noclip_speed * delta
+		
+		is_climbing = false
+		climb_normal = Vector3.ZERO
+		just_jumped_off = false
+		return
+		
 	if position.y <= -voidDepth:
 		reset()
 
@@ -362,6 +409,8 @@ func _physics_process(delta: float) -> void:
 
 		if abs(climb_input) > 0.01:
 			climb_input = sign(climb_input)
+		elif h_input != 0:
+			climb_input = 1.0
 
 		velocity.y = climb_input * climb_speed
 		
@@ -384,22 +433,25 @@ func _physics_process(delta: float) -> void:
 		
 		if Input.is_action_pressed("ui_accept") and knockback_timer <= 0:
 			# truss bouncing
-			var backward_dir = global_transform.basis.z
-			var knockback_dir = Vector3(-backward_dir.x, 0, -backward_dir.z).normalized()
+			var knockback_dir = -global_transform.basis.z.normalized()
 			
 			# Truss momentum logic
+			if climb_input < -0.01:
+				velocity.x = knockback_dir.x * 43.65
+				velocity.z = knockback_dir.z * 43.65
+				velocity.y = 29.18
+			else:
+				velocity.x = knockback_dir.x * 38.0
+				velocity.z = knockback_dir.z * 38.0
+				velocity.y = 34.0
 			
-			velocity.x = knockback_dir.x * jump_off_force * (2.0 - climb_input/2) # If climbing UP: 2 - 1/2
-			velocity.z = knockback_dir.z * jump_off_force * (2.0 - climb_input/2) # If climbing DOWN: 2 + 1/2
-
-			velocity.y = JUMP_VELOCITY * ((0.1*climb_input) + jump_up_force) # UP: 0.1 + 1.1; DOWN: 0.1 - 1.1; NEUTRAL: 1.1
-			# (0.1*climb_input)-0.1 could be implemented instead but im assuming you want default jump off force to be 1.1
+			global_position += knockback_dir * 0.05
 			
 			is_climbing = false
 			climb_normal = Vector3.ZERO
 			just_jumped_off = true
 			
-			knockback_timer = 0.2
+			knockback_timer = 0.28
 			jump_lock = 0.125
 		
 		set_climb_anim(
@@ -411,12 +463,19 @@ func _physics_process(delta: float) -> void:
 		if knockback_timer > 0.0:
 			knockback_timer -= delta
 			
-			if direction != Vector3.ZERO:
-				velocity.x = lerp(velocity.x, direction.x * SPEED, 3.0 * delta)
-				velocity.z = lerp(velocity.z, direction.z * SPEED, 3.0 * delta)
+			var current_h_vel = Vector3(velocity.x, 0.0, velocity.z)
+			var target_h_vel = direction * SPEED
+			
+			if current_h_vel.length() > SPEED:
+				current_h_vel = current_h_vel.move_toward(target_h_vel, 142.0 * delta)
 			else:
-				velocity.x = lerp(velocity.x, 0.0, 2.0 * delta)
-				velocity.z = lerp(velocity.z, 0.0, 2.0 * delta)
+				if direction != Vector3.ZERO:
+					current_h_vel = target_h_vel
+				else:
+					current_h_vel = current_h_vel.move_toward(Vector3.ZERO, 140.0 * delta)
+					
+			velocity.x = current_h_vel.x
+			velocity.z = current_h_vel.z
 		else:
 			if direction != Vector3.ZERO:
 				velocity.x = direction.x * SPEED
@@ -424,13 +483,13 @@ func _physics_process(delta: float) -> void:
 			else:
 				velocity.x = 0
 				velocity.z = 0
-	if rotation_locked:
-		rotation.y = cam.yaw + PI
-	else:
-		if direction.length() > 0.001 and not is_climbing:
+	if not $CollisionShape3D.disabled:
+		rotation.x = 0.0
+		if rotation_locked:
+			rotation.y = cam.yaw + PI
+		elif direction.length() > 0.001 and not is_climbing:
 			var target_angle = atan2(-direction.x, -direction.z)
-			var stable_delta = min(delta, 0.1)
-			rotation.y = lerp_angle(rotation.y, target_angle + PI, 10.0 * stable_delta)
+			rotation.y = lerp_angle(rotation.y, target_angle + PI, 10.0 * min(delta, 0.1))
 			
 			
 	_step_climbing()

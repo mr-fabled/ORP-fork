@@ -445,11 +445,12 @@ initial_position = 2
 size = Vector2i(300, 150)
 dialog_text = "Restart to apply changes"
 
-[node name="AlljumpToggle" parent="." unique_id=118282012 instance=ExtResource("8_mipys")]
+[node name="PracticeToggle" parent="." unique_id=118282012 instance=ExtResource("8_mipys")]
 offset_left = 1057.0
 offset_top = 52.0
 offset_right = 1165.0
 offset_bottom = 91.0
+text = "Practice"
 
 [node name="AvatarCustom" type="Node2D" parent="." unique_id=1786122237]
 position = Vector2(2539, 0)
