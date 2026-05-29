@@ -39,9 +39,8 @@ func _send_color_to_player(part: String, color: Color):
 func _file_dragged(files:PackedStringArray):
 	for x in files:
 		if x.ends_with(".json"):
-			print("level lowk dragged")
 			var file_name = x.get_file()
-			print(file_name)
+			print(file_name + " has been dragged into the game!")
 			var dest = "user://levels/"+file_name
 			
 			if FileAccess.file_exists(dest):
@@ -51,7 +50,7 @@ func _file_dragged(files:PackedStringArray):
 			DirAccess.copy_absolute(x,dest)
 			load_all_levels()
 		else:
-			push_warning("file not json durr")
+			push_warning("File isn't json! Ignoring.")
 	pass
 
 func _on_play_pressed() -> void: # when you press play
@@ -59,26 +58,6 @@ func _on_play_pressed() -> void: # when you press play
 	
 	if DiscordRPCManager != null:
 		DiscordRPCManager.playing(GameManager.currentLevel)
-
-
-func _on_settings_pressed() -> void: # when you press settings it makes your camera go to the settings area
-	cam.global_position = Settings.global_position
-	
-	if DiscordRPCManager != null:
-		DiscordRPCManager.settings() # discordrpc settings thingy
-
-
-func _on_return_to_main_pressed() -> void:
-	cam.global_position = Main.global_position
-	
-	if DiscordRPCManager != null:
-		DiscordRPCManager.menu()
-
-func _on_return_to_settings_pressed() -> void:
-	cam.global_position = Settings.global_position
-
-func _on_avatar_pressed() -> void:
-	cam.global_position = AvatarCustom.global_position
 
 func load_level(path): # loads level data and returns it
 	var file = FileAccess.open(path,FileAccess.READ)
@@ -93,8 +72,8 @@ func load_level(path): # loads level data and returns it
 	var data = json.data
 	return data
 
-
-func load_all_levels(): # loads all levels in the folder and then adds it to the level list
+## Loads all levels in the folder and then adds it to the level list
+func load_all_levels():
 	for x in list.get_children():
 		x.call_deferred("queue_free")
 
@@ -121,8 +100,8 @@ func load_all_levels(): # loads all levels in the folder and then adds it to the
 			desc.text = "Tier: %s\nBy: %s" % [difficulty, creator]
 		)
 
-
-func fetch_levels(): # fetches all ur levels
+## Gets a list of ur levels
+func fetch_levels():
 	var levels = []
 	var dir = DirAccess.open("user://levels")
 	
@@ -140,3 +119,24 @@ func fetch_levels(): # fetches all ur levels
 	
 	dir.list_dir_end()
 	return levels
+
+
+# -- Switching between "pages" -- #
+
+func _on_settings_pressed() -> void: # when you press settings it makes your camera go to the settings area
+	cam.global_position = Settings.global_position
+	
+	if DiscordRPCManager != null:
+		DiscordRPCManager.settings() # discordrpc settings thingy
+
+func _on_return_to_main_pressed() -> void:
+	cam.global_position = Main.global_position
+	
+	if DiscordRPCManager != null:
+		DiscordRPCManager.menu()
+
+func _on_return_to_settings_pressed() -> void:
+	cam.global_position = Settings.global_position
+
+func _on_avatar_pressed() -> void:
+	cam.global_position = AvatarCustom.global_position

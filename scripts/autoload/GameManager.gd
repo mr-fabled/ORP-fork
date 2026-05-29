@@ -16,7 +16,7 @@ signal CharacterAdded(Player)
 signal VersionLoaded
 
 var version_latest:String   #  This is the latest version from github - danki
-const version:String = "0.5.3"        #  The current version - danki
+var version:String = ProjectSettings.get_setting("application/config/version")       #  The current version - danki
 
 # Setup
 
